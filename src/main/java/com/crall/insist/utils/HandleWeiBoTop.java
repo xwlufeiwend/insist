@@ -1,5 +1,6 @@
 package com.crall.insist.utils;
 
+import com.crall.insist.entity.HeaderEntity;
 import com.crall.insist.utils.intrface.HandleHtml;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -12,7 +13,7 @@ import java.util.*;
 
 
 /**
- * 处理HTML页面内容
+ * 处理热搜界面
  */
 @Component
 public class HandleWeiBoTop implements HandleHtml {
@@ -21,7 +22,11 @@ public class HandleWeiBoTop implements HandleHtml {
     public List<Map<String, Object>> handleSampleHtml(String url) {
         List<Map<String, Object>> list = new ArrayList<>();
         try {
-            String sourceHtml = HttpClientUtils.getUrl(url, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36");
+            HeaderEntity he = new HeaderEntity();
+            he.setCookie("SUB=_2AkMUJB0Uf8NxqwJRmPEdymzmbItzyQ_EieKieOzPJRMxHRl-yT92qk86tRB6P6Qz-7-uAjcfj6i75KBKjgSxmkOwIhyk; SUBP=0033WrSXqPxfM72-Ws9jqgMF55529P9D9WFTLepmAYa2Sm10WGy1AQGj; _s_tentry=passport.weibo.com; Apache=9496801407286.674.1668846116488; SINAGLOBAL=9496801407286.674.1668846116488; ULV=1668846116493:1:1:1:9496801407286.674.1668846116488:");
+            he.setUseAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36");
+            he.setReferer("https://s.weibo.com/top/summary?cate=socialevent");
+            String sourceHtml = HttpClientUtils.getUrl(url, he);
 //            System.out.println(sourceHtml);
             // 创建Document对象
             Document document = Jsoup.parse(sourceHtml);
@@ -51,5 +56,10 @@ public class HandleWeiBoTop implements HandleHtml {
             e.printStackTrace();
         }
         return list;
+    }
+
+    @Override
+    public Map<String, Object> handleMapHtml(String url) {
+        return null;
     }
 }
