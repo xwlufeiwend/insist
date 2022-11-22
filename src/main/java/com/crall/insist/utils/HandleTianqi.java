@@ -36,7 +36,7 @@ public class HandleTianqi implements HandleHtml {
 //            System.out.println(sourceHtml);
             Document document = Jsoup.parse(sourceHtml);
             Element weather_info = document.getElementsByClass("weather_info").first();
-            System.out.println(weather_info);
+//            System.out.println(weather_info);
             //获取日历信息
             String week = weather_info.getElementsByClass("week").first().html();
             map.put("week",week);// 日历
