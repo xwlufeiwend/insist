@@ -1,5 +1,6 @@
 package com.crall.insist.controller;
 
+import com.crall.insist.service.IndexService;
 import com.crall.insist.utils.HandleTianqi;
 import com.crall.insist.utils.HandleWeiBoTop;
 import com.crall.insist.utils.intrface.HandleHtml;
@@ -20,6 +21,9 @@ import java.util.Map;
 @RestController
 @CrossOrigin
 public class index {
+    //依赖自动注入
+    @Autowired
+    private IndexService indexService;
 //    private HandleWeiBoTop handleWeiBoTop;
     @GetMapping("/index")
     public Map<String, Object> indexInfo(){
@@ -51,6 +55,7 @@ public class index {
         String url = "https://www.tianqi.com/wuhan";
         Map<String, Object> map1 = handleTianqi.handleMapHtml(url);
         map.put("weather", map1);
+        indexService.sendEmailtoMe(map1);
         return map;
     }
 }

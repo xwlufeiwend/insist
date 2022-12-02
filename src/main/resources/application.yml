@@ -6,3 +6,12 @@ spring:
     url:  jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8&useSSL=false
     username: root
     password: root
+  mail:
+    #邮件服务器
+    host: smtp.163.com
+    username: xwlufeiwend@163.com #你的邮箱地址
+    password: VYXOWDBPRIZFTDQL #授权码或密码
+    properties.mail.smtp.auth: true #是否开启验证 true 开启
+    properties.mail.smtp.starttls.enable: true #通讯是否加密 true 开启
+    properties.mail.smtp.starttls.required: true #是否必须通过使用加密通讯进行通讯 true开启
+    default-encoding: utf-8 #默认编码
