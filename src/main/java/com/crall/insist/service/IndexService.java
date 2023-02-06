@@ -24,4 +24,8 @@ public class IndexService {
         logger.info("发送邮件内容："+str);
         mySendMailUtils.sendSimpleText("1364980105@qq.com","天气预报", str);
     }
+
+    public void sendEmailtoMe(String weather){
+        logger.info("weather: {}", weather);
+    }
 }

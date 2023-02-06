@@ -1,5 +1,6 @@
 package com.crall.insist.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.crall.insist.service.IndexService;
 import com.crall.insist.utils.HandleTianqi;
 import com.crall.insist.utils.HandleWeiBoTop;
@@ -11,12 +12,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.xml.crypto.Data;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @RestController
 @CrossOrigin
@@ -24,6 +26,9 @@ public class index {
     //依赖自动注入
     @Autowired
     private IndexService indexService;
+
+    @Autowired
+    private JedisPool jedisPool;
 //    private HandleWeiBoTop handleWeiBoTop;
     @GetMapping("/index")
     public Map<String, Object> indexInfo(){
@@ -39,23 +44,34 @@ public class index {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         String url = "https://s.weibo.com/top/summary?cate=realtimehot";
         HandleHtml handleWeiBoTop = new HandleWeiBoTop();
-        List<Map<String, Object>> sourceList = handleWeiBoTop.handleSampleHtml(url);
-        map.put("weiboTopList", sourceList);
+        Jedis resource = jedisPool.getResource();
+        if (resource.get("sourceList") == null) {
+            List<Map<String, Object>> sourceList = handleWeiBoTop.handleSampleHtml(url);
+            resource.set("sourceList", sourceList.toString());
+        }
+        map.put("weiboTopList", resource.get("sourceList"));
+        resource.close();
         return map;
     }
 
     @GetMapping("/weather")
     public Map<String, Object> getWeather(HttpServletRequest request){
-//        Map<String, String[]> parameterMap = request.getParameterMap();
-        //获取前端的请求参数 dateStr(前端自定义参数)
         String dateStr = request.getParameter("dateStr");
-//        System.out.println(dateStr);
         Map<String, Object> map = new HashMap<String, Object>();
         HandleHtml handleTianqi = new HandleTianqi();
         String url = "https://www.tianqi.com/wuhan";
-        Map<String, Object> map1 = handleTianqi.handleMapHtml(url);
-        map.put("weather", map1);
-        indexService.sendEmailtoMe(map1);
+        Jedis resource = jedisPool.getResource();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-mm-dd");
+        String format = simpleDateFormat.format(new Date());
+        String key = "weather" + format;
+        System.out.println("日期" + format);
+        if (resource.get(key) == null){
+            Map<String, Object> map1 = handleTianqi.handleMapHtml(url);
+            resource.set(key, JSONObject.toJSONString(map1));
+        }
+        map.put("weather", resource.get(key));
+        indexService.sendEmailtoMe(resource.get(key));
+        resource.close();
         return map;
     }
 }

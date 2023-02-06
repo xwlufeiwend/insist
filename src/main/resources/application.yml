@@ -15,3 +15,16 @@ spring:
     properties.mail.smtp.starttls.enable: true #通讯是否加密 true 开启
     properties.mail.smtp.starttls.required: true #是否必须通过使用加密通讯进行通讯 true开启
     default-encoding: utf-8 #默认编码
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    jedis:
+      pool:
+        max-active: 10
+        max-wait: -1
+        max-idle: 8
+        min-idle: 1
+    timeout: 1000
+    password: xwredis
+    database: 0
+
