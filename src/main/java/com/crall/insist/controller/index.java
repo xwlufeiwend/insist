@@ -47,9 +47,15 @@ public class index {
         Jedis resource = jedisPool.getResource();
         if (resource.get("sourceList") == null) {
             List<Map<String, Object>> sourceList = handleWeiBoTop.handleSampleHtml(url);
-            resource.set("sourceList", sourceList.toString());
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("weiBoList", sourceList);
+            resource.set("sourceList", jsonObject.toJSONString());
         }
+        System.out.println(resource.get("sourceList"));
         map.put("weiboTopList", resource.get("sourceList"));
+        //List<Map<String, Object>> sourceList = handleWeiBoTop.handleSampleHtml(url);
+        //map.put("weiboList", sourceList);
+
         resource.close();
         return map;
     }

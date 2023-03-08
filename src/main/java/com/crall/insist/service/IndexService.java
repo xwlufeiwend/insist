@@ -1,5 +1,6 @@
 package com.crall.insist.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.crall.insist.utils.MySendMailUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,5 +28,13 @@ public class IndexService {
 
     public void sendEmailtoMe(String weather){
         logger.info("weather: {}", weather);
+        Map<String, Object> map = (Map<String, Object>) JSONObject.parse(weather);
+        StringBuilder stringBuilder = new StringBuilder(map.get("week").toString());
+        stringBuilder.append("\n");
+        stringBuilder.append(map.get("tq").toString());
+        stringBuilder.append("  "+map.get("wd").toString());
+        String str = new String(stringBuilder);
+        logger.info("发送邮件内容："+str);
+        mySendMailUtils.sendSimpleText("1364980105@qq.com","天气预报", str);
     }
 }
