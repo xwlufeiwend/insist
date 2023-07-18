@@ -1,6 +1,7 @@
 package com.crall.insist.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.crall.insist.aspects.annotation.MyLog;
 import com.crall.insist.service.IndexService;
 import com.crall.insist.utils.HandleTianqi;
 import com.crall.insist.utils.HandleWeiBoTop;
@@ -61,6 +62,7 @@ public class index {
     }
 
     @GetMapping("/weather")
+    @MyLog(value = "weather")
     public Map<String, Object> getWeather(HttpServletRequest request){
         String dateStr = request.getParameter("dateStr");
         Map<String, Object> map = new HashMap<String, Object>();
