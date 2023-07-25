@@ -45,7 +45,7 @@ public class index {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         String url = "https://s.weibo.com/top/summary?cate=realtimehot";
         HandleHtml handleWeiBoTop = new HandleWeiBoTop();
-        Jedis resource = jedisPool.getResource();
+        /*Jedis resource = jedisPool.getResource();
         if (resource.get("sourceList") == null) {
             List<Map<String, Object>> sourceList = handleWeiBoTop.handleSampleHtml(url);
             JSONObject jsonObject = new JSONObject();
@@ -54,10 +54,11 @@ public class index {
         }
         System.out.println(resource.get("sourceList"));
         map.put("weiboTopList", resource.get("sourceList"));
-        //List<Map<String, Object>> sourceList = handleWeiBoTop.handleSampleHtml(url);
-        //map.put("weiboList", sourceList);
+        resource.close();*/
 
-        resource.close();
+        List<Map<String, Object>> sourceList = handleWeiBoTop.handleSampleHtml(url);
+        map.put("weiboList", sourceList);
+
         return map;
     }
 
